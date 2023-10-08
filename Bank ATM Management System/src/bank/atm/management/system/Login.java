@@ -1,9 +1,25 @@
-
 package bank.atm.management.system;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import util.DataBaseConnection;
 
 public class Login extends javax.swing.JFrame {
-    
+
+    DataBaseConnection con = new DataBaseConnection();
+
+    PreparedStatement ps;
+    ResultSet rs;
+    String sql = "";
+
+    MainMenu menu = new MainMenu();
+
+    ApplicationForm form = new ApplicationForm();
+
     /**
      * Creates new form Login
      */
@@ -27,10 +43,10 @@ public class Login extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        txtAccNo = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+        btnLogin = new javax.swing.JButton();
+        btnSingUp = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -50,7 +66,6 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 570, 37));
 
         jLabel6.setIcon(new javax.swing.ImageIcon("E:\\AdvanceJava-Home-Practice\\Bank ATM Management System\\icon\\logo.jpg")); // NOI18N
-        jLabel6.setPreferredSize(new java.awt.Dimension(100, 100));
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 90));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 90));
@@ -67,21 +82,73 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("ACC NO");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 100, 40));
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, 220, 40));
-        jPanel2.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 220, 40));
+        jPanel2.add(txtAccNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, 220, 40));
+        jPanel2.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, 220, 40));
 
-        jButton1.setBackground(new java.awt.Color(102, 102, 255));
-        jButton1.setText("Login");
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, 120, 40));
+        btnLogin.setBackground(new java.awt.Color(102, 102, 255));
+        btnLogin.setText("Login");
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLoginMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 190, 120, 40));
 
-        jButton2.setBackground(new java.awt.Color(102, 153, 255));
-        jButton2.setText("Sing Up");
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, 120, 40));
+        btnSingUp.setBackground(new java.awt.Color(102, 153, 255));
+        btnSingUp.setText("Sing Up");
+        btnSingUp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSingUpMouseClicked(evt);
+            }
+        });
+        jPanel2.add(btnSingUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, 120, 40));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 570, 330));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
+        // TODO add your handling code here:
+
+        //String Query ="select * from accountinfo where id="+txtAccNo.getText()+"and pin"+txtPassword.getText()+"";
+        if (txtAccNo.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Enter Account And Pin");
+        } else {
+
+            String sql = "select * from accountinfo where accId='" + txtAccNo.getText() + "' and pin=" + txtPassword.getText() + "";
+
+            try {
+                ps = con.getCon().prepareStatement(sql);
+               rs= ps.executeQuery();
+
+                if (this.rs.next()) {
+                    new MainMenu(rs.getInt(1)).setVisible(true);
+                    this.dispose();
+
+                } else {
+
+                    JOptionPane.showMessageDialog(this, "Worng Account No or Pin");
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex);
+
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+//        dispose();
+//        menu.setVisible(true);
+//        menu.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnLoginMouseClicked
+
+    private void btnSingUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSingUpMouseClicked
+        // TODO add your handling code here:
+        dispose();
+        form.setVisible(true);
+        form.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnSingUpMouseClicked
 
     /**
      * @param args the command line arguments
@@ -119,8 +186,8 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnSingUp;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -128,7 +195,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtAccNo;
+    private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,8 +13,11 @@ public class MiniStatement extends javax.swing.JFrame {
     /**
      * Creates new form MiniStatement
      */
-    public MiniStatement() {
+    private MainMenu mainMenu;
+
+    public MiniStatement(MainMenu mainMenu) {
         initComponents();
+        this.mainMenu = mainMenu;
     }
 
     /**
@@ -28,6 +31,7 @@ public class MiniStatement extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnMiniStatement = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -45,10 +49,25 @@ public class MiniStatement extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-4, 0, 700, 460));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 370));
+
+        btnMiniStatement.setText("Back");
+        btnMiniStatement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMiniStatementMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnMiniStatement, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 400, 110, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnMiniStatementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMiniStatementMouseClicked
+        // TODO add your handling code here:
+        dispose();
+        mainMenu.setVisible(true);
+        
+    }//GEN-LAST:event_btnMiniStatementMouseClicked
 
     /**
      * @param args the command line arguments
@@ -80,12 +99,15 @@ public class MiniStatement extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MiniStatement().setVisible(true);
+                MainMenu mainMenu = new MainMenu();
+                MiniStatement miniStatement = new MiniStatement(mainMenu);
+                miniStatement.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMiniStatement;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

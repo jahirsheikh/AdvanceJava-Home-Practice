@@ -4,17 +4,68 @@
  */
 package bank.atm.management.system;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import util.DataBaseConnection;
+
 /**
  *
  * @author Dell
  */
 public class Deposit extends javax.swing.JFrame {
 
+    DataBaseConnection con = new DataBaseConnection();
+
+    PreparedStatement ps;
+    ResultSet rs, rs1;
+    String sql = "";
+
     /**
      * Creates new form Deposit
      */
-    public Deposit() {
+    private MainMenu mainMenu;
+
+    public Deposit(MainMenu mainMenu) {
         initComponents();
+        this.mainMenu = mainMenu;
+        getBalance();
+    }
+    int MyAccNum;
+    
+
+    public Deposit(int AccNum) {
+        initComponents();
+        MyAccNum=AccNum;
+        getBalance();
+   
+    }
+
+    int oldBlance;
+    
+
+    private void getBalance() {
+        String sql = "select * from accountinfo where accId="+MyAccNum+";";
+
+        try {
+            ps = con.getCon().prepareStatement(sql);
+
+           rs1= ps.executeQuery();
+            
+
+            if (rs1.next()) {
+                oldBlance = rs1.getInt(9);
+            } else {
+                //  JOptionPane.showMessageDialog(this, " ");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Deposit.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -28,10 +79,12 @@ public class Deposit extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        amountDeposit = new javax.swing.JTextField();
+        btnDeposit = new javax.swing.JButton();
+        btnBackDeposit = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        Atm = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -43,21 +96,81 @@ public class Deposit extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("ENTER AMOUNT YOU WANT TO DEPOSIT");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 260, 37));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 230, 30));
+        jPanel1.add(amountDeposit, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 230, 30));
 
-        jButton1.setText("DEPOSIT");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 150, 30));
+        btnDeposit.setText("DEPOSIT");
+        btnDeposit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDepositMouseClicked(evt);
+            }
+        });
+        jPanel1.add(btnDeposit, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 150, 30));
 
-        jButton2.setText("BACK");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, 150, 30));
+        btnBackDeposit.setText("BACK");
+        btnBackDeposit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBackDepositMouseClicked(evt);
+            }
+        });
+        btnBackDeposit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackDepositActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBackDeposit, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, 150, 30));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("E:\\AdvanceJava-Home-Practice\\Bank ATM Management System\\icon\\atm2.jpg")); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel3.setText("jLabel3");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, -1, -1));
+
+        jLabel4.setText("jLabel4");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, -1, -1));
+
+        Atm.setIcon(new javax.swing.ImageIcon("E:\\AdvanceJava-Home-Practice\\Bank ATM Management System\\icon\\atm2.jpg")); // NOI18N
+        jPanel1.add(Atm, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 540));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 540));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackDepositMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackDepositMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnBackDepositMouseClicked
+
+    private void btnBackDepositActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackDepositActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        mainMenu.setVisible(true);
+        mainMenu.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnBackDepositActionPerformed
+
+    private void btnDepositMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDepositMouseClicked
+        // TODO add your handling code here:
+
+        if (amountDeposit.getText().isEmpty() || amountDeposit.getText().equals(0)) {
+            JOptionPane.showMessageDialog(rootPane, "Enter the valid Amount");
+        } else {
+            String sql = "Update accountinfo set balance=? where accId=?";
+            try {
+                ps = con.getCon().prepareStatement(sql);
+                ps.setInt(1, oldBlance + Integer.valueOf(amountDeposit.getText()));
+                ps.setInt(2, MyAccNum);
+
+                if (ps.executeUpdate()==1) {
+                    JOptionPane.showMessageDialog(rootPane, "Balance Update");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Missing Update");
+
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex);
+
+                Logger.getLogger(Deposit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnDepositMouseClicked
 
     /**
      * @param args the command line arguments
@@ -89,17 +202,22 @@ public class Deposit extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Deposit().setVisible(true);
+
+                MainMenu mainMenu = new MainMenu();
+                Deposit deposit = new Deposit(mainMenu);
+                deposit.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel Atm;
+    private javax.swing.JTextField amountDeposit;
+    private javax.swing.JButton btnBackDeposit;
+    private javax.swing.JButton btnDeposit;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

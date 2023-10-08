@@ -13,8 +13,11 @@ public class Blance extends javax.swing.JFrame {
     /**
      * Creates new form Blance
      */
-    public Blance() {
+    private MainMenu mainMenu;
+    public Blance(MainMenu mainMenu) {
         initComponents();
+        
+        this.mainMenu=mainMenu;
     }
 
     /**
@@ -31,7 +34,7 @@ public class Blance extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnBalanceCheck = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -52,16 +55,28 @@ public class Blance extends javax.swing.JFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 200, 30));
         jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 60, 20));
 
-        jButton1.setText("Back");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 260, 120, 30));
+        btnBalanceCheck.setText("Back");
+        btnBalanceCheck.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBalanceCheckMouseClicked(evt);
+            }
+        });
+        jPanel1.add(btnBalanceCheck, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 260, 120, 30));
 
         jLabel2.setIcon(new javax.swing.ImageIcon("E:\\AdvanceJava-Home-Practice\\Bank ATM Management System\\icon\\atm2.jpg")); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -2, 600, 540));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 540));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 540));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBalanceCheckMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBalanceCheckMouseClicked
+        // TODO add your handling code here:
+        dispose();
+        mainMenu.setVisible(true);
+        
+    }//GEN-LAST:event_btnBalanceCheckMouseClicked
 
     /**
      * @param args the command line arguments
@@ -93,13 +108,18 @@ public class Blance extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Blance().setVisible(true);
+                
+                MainMenu mainMenu = new MainMenu();
+                Blance blance = new Blance(mainMenu);
+                blance.setVisible(true);
+                
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnBalanceCheck;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JList<String> jList1;
